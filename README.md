@@ -2,6 +2,19 @@
 
 A full-stack application for managing outreach campaigns with LinkedIn profile scraping and personalized message generation.
 
+## Screenshots
+
+![Home](./screenshot/home.png)
+*Home Page*
+
+![Campaigns](./screenshot/campaigns.png)
+*Campaigns Page*
+
+![Manage Campaign](./screenshot/manage-campaign.png)
+*Manage Campaign Page*
+
+![Personalised Message](./screenshot/personalised-message.png)
+*Personalised Message Page*
 
 ## Features
 
@@ -131,4 +144,3 @@ interface ILinkedInProfile {
   scrapedAt: Date;
 }
 ```
-
