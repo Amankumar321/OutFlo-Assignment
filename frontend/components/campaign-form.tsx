@@ -250,8 +250,8 @@ export function CampaignForm({ onSubmit, isSubmitting, initialData }: CampaignFo
                       const profile = profiles.find(p => p.profileUrl === lead)
                       return (
                         <li key={index} className="flex items-center justify-between p-2 bg-muted rounded-md">
-                          <div>
-                            <span className="font-medium">{profile?.fullName || lead}</span>
+                          <div className="max-w-full">
+                            <span className="font-medium break-all">{profile?.fullName || lead}</span>
                             {profile && (
                               <div className="text-sm text-muted-foreground">
                                 {profile.jobTitle} at {profile.company}
