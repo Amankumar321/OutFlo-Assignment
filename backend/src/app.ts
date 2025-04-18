@@ -3,6 +3,7 @@ import cors from 'cors';
 import connectDB from './config/db';
 import campaignRoutes from './routes/campaign.routes';
 import messageRoutes from './routes/message.routes';
+import scraperRoutes from './routes/scraper.routes';
 import dotenv from 'dotenv';
 
 dotenv.config();
@@ -17,9 +18,12 @@ app.use(express.json());
 // Database connection
 connectDB();
 
+// Add this line before the error handling middleware
+
 // Routes
 app.use('/campaigns', campaignRoutes);
 app.use('/personalized-message', messageRoutes);
+app.use('/scraper', scraperRoutes);
 
 // Health check
 app.get('/health', (req, res) => {
