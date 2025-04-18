@@ -41,12 +41,12 @@ export default function NewCampaignPage() {
                 Back
               </Button>
             </Link>
-            <h1 className="text-3xl font-bold tracking-tight">Create Campaign</h1>
+            <h1 className="text-2xl sm:text-3xl font-bold tracking-tight">Create Campaign</h1>
           </div>
 
           <Card>
             <CardHeader>
-              <CardTitle>Campaign Details</CardTitle>
+              <CardTitle className="text-xl">Campaign Details</CardTitle>
               <CardDescription>Enter the details for your new outreach campaign</CardDescription>
             </CardHeader>
             <CardContent>
