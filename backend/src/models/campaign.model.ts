@@ -1,9 +1,6 @@
 import { Schema, model } from 'mongoose';
 import { ICampaign } from '../interfaces/campaign.interface';
 
-const leadSchema = new Schema({
-  url: { type: String, required: true }
-});
 
 const campaignSchema = new Schema<ICampaign>({
   name: { type: String, required: true },
@@ -14,7 +11,7 @@ const campaignSchema = new Schema<ICampaign>({
     enum: ['ACTIVE', 'INACTIVE', 'DELETED'],
     default: 'ACTIVE'
   },
-  leads: [leadSchema],
+  leads: [{ type: String }],
   accountIDs: [{ type: String }]
 }, {
   timestamps: true
