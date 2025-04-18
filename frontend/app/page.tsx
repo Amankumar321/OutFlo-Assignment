@@ -17,15 +17,15 @@ export default function HomePage() {
           </Link>
           <nav className="flex items-center sm:gap-2">
             <Link href="/campaigns">
-              <Button variant="ghost">Campaigns</Button>
+              <Button size="sm" className="px-2" variant="ghost">Campaigns</Button>
             </Link>
             <Link href="/message-generator">
-              <Button variant="ghost">Message Generator</Button>
+              <Button size="sm" className="px-2" variant="ghost">Message Generator</Button>
             </Link>
           </nav>
         </div>
       </header>
-      <main className="flex-1 py-10 px-10 container self-center">
+      <main className="flex-1 py-10 px-4 container self-center">
         <div className="grid gap-6 md:grid-cols-2 lg:grid-cols-2">
           <div className="rounded-lg border bg-card text-card-foreground shadow-sm p-6 max-w-xl">
             <div className="flex flex-col space-y-1.5 pb-4">
@@ -56,7 +56,7 @@ export default function HomePage() {
         </div>
       </main>
       <footer className="border-t py-6">
-        <div className="container flex flex-col items-center justify-between px-2 gap-4 md:flex-row">
+        <div className="container flex flex-col items-center justify-between px-4 gap-4 md:flex-row">
           <p className="text-sm text-muted-foreground">© 2024 Campaign Management System. All rights reserved.</p>
         </div>
       </footer>

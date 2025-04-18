@@ -37,10 +37,10 @@ export default function MessageGeneratorPage() {
           </Link>
           <nav className="flex items-center sm:gap-2">
             <Link href="/campaigns">
-              <Button variant="ghost">Campaigns</Button>
+              <Button size="sm" className="px-2" variant="ghost">Campaigns</Button>
             </Link>
             <Link href="/message-generator">
-              <Button variant="ghost">Message Generator</Button>
+              <Button size="sm" className="px-2" variant="ghost">Message Generator</Button>
             </Link>
           </nav>
         </div>
