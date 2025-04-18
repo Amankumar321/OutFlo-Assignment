@@ -51,9 +51,11 @@ export default function EditCampaignPage({ params }: { params: { id: string } })
 
   if (isLoading) {
     return (
-      <div className="container py-10">
-        <div className="flex justify-center items-center h-64">
-          <div className="animate-spin rounded-full h-12 w-12 border-b-2 border-primary"></div>
+      <div className="w-full flex flex-col items-center justify-center">
+        <div className="container py-10 px-2">
+          <div className="flex justify-center items-center h-64">
+            <div className="animate-spin rounded-full h-12 w-12 border-b-2 border-primary"></div>
+          </div>
         </div>
       </div>
     )
@@ -61,47 +63,51 @@ export default function EditCampaignPage({ params }: { params: { id: string } })
 
   if (error || !campaign) {
     return (
-      <div className="container py-10">
-        <Card>
-          <CardContent className="pt-6">
-            <div className="text-center text-red-500">{error || "Campaign not found"}</div>
-            <div className="flex justify-center mt-4">
-              <Link href="/campaigns">
-                <Button variant="outline">
-                  <ArrowLeft className="mr-2 h-4 w-4" />
-                  Back to Campaigns
-                </Button>
-              </Link>
-            </div>
-          </CardContent>
-        </Card>
+      <div className="w-full flex flex-col items-center justify-center">
+        <div className="container py-10 px-2">
+          <Card>
+            <CardContent className="pt-6">
+              <div className="text-center text-red-500">{error || "Campaign not found"}</div>
+              <div className="flex justify-center mt-4">
+                <Link href="/campaigns">
+                  <Button variant="outline">
+                    <ArrowLeft className="mr-2 h-4 w-4" />
+                    Back to Campaigns
+                  </Button>
+                </Link>
+              </div>
+            </CardContent>
+          </Card>
+        </div>
       </div>
     )
   }
 
   return (
-    <div className="container py-10">
-      <div className="max-w-3xl mx-auto">
-        <div className="flex items-center gap-4 mb-6">
-          <Link href={`/campaigns/${params.id}`}>
-            <Button variant="outline" size="sm">
-              <ArrowLeft className="mr-2 h-4 w-4" />
-              Back
-            </Button>
-          </Link>
-          <h1 className="text-3xl font-bold tracking-tight">Edit Campaign</h1>
-        </div>
+    <div className="w-full flex flex-col items-center justify-center">
+      <div className="container py-10 px-2">
+        <div className="max-w-3xl mx-auto">
+          <div className="flex items-center gap-4 mb-6">
+            <Link href={`/campaigns/${params.id}`}>
+              <Button variant="outline" size="sm">
+                <ArrowLeft className="mr-2 h-4 w-4" />
+                Back
+              </Button>
+            </Link>
+            <h1 className="text-3xl font-bold tracking-tight">Edit Campaign</h1>
+          </div>
 
-        <Card>
-          <CardHeader>
-            <CardTitle>Edit Campaign Details</CardTitle>
-            <CardDescription>Update the details for your campaign</CardDescription>
-          </CardHeader>
-          <CardContent>
-            {error && <div className="text-red-500 mb-4">{error}</div>}
-            <CampaignForm onSubmit={handleSubmit} isSubmitting={isSubmitting} initialData={campaign} />
-          </CardContent>
-        </Card>
+          <Card>
+            <CardHeader>
+              <CardTitle>Edit Campaign Details</CardTitle>
+              <CardDescription>Update the details for your campaign</CardDescription>
+            </CardHeader>
+            <CardContent>
+              {error && <div className="text-red-500 mb-4">{error}</div>}
+              <CampaignForm onSubmit={handleSubmit} isSubmitting={isSubmitting} initialData={campaign} />
+            </CardContent>
+          </Card>
+        </div>
       </div>
     </div>
   )

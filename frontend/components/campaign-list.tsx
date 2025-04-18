@@ -25,7 +25,7 @@ export function CampaignList({ campaigns }: CampaignListProps) {
       setUpdatingStatus((prev) => ({ ...prev, [campaign._id]: true }))
       const newStatus = campaign.status === "ACTIVE" ? "INACTIVE" : "ACTIVE"
       await updateCampaign(campaign._id, { ...campaign, status: newStatus })
-      router.refresh()
+      location.reload()
     } catch (err) {
       setError(`Failed to update status for ${campaign.name}`)
       console.error(err)

@@ -6,6 +6,7 @@ import { Card, CardContent, CardDescription, CardFooter, CardHeader, CardTitle }
 import { MessageGeneratorForm } from "@/components/message-generator-form"
 import type { LinkedInProfile } from "@/types/linkedin-profile"
 import { generatePersonalizedMessage } from "@/lib/api"
+import Link from "next/link"
 
 export default function MessageGeneratorPage() {
   const [message, setMessage] = useState<string | null>(null)
@@ -28,8 +29,23 @@ export default function MessageGeneratorPage() {
   }
 
   return (
-    <div className="container py-10">
-      <div className="max-w-4xl mx-auto">
+    <div className="w-full flex flex-col justify-center">
+      <header className="w-full border-b mb-10">
+        <div className="w-full flex items-center justify-between py-4 px-4">
+          <Link href="/">
+            <h1 className="text-lg sm:text-xl font-bold">Dashboard</h1>
+          </Link>
+          <nav className="flex items-center sm:gap-2">
+            <Link href="/campaigns">
+              <Button variant="ghost">Campaigns</Button>
+            </Link>
+            <Link href="/message-generator">
+              <Button variant="ghost">Message Generator</Button>
+            </Link>
+          </nav>
+        </div>
+      </header>
+      <div className="container mx-auto px-4 pb-10">
         <h1 className="text-3xl font-bold tracking-tight mb-2">LinkedIn Message Generator</h1>
         <p className="text-muted-foreground mb-6">
           Generate personalized outreach messages based on LinkedIn profile data

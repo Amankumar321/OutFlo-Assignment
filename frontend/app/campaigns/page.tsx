@@ -34,47 +34,64 @@ export default function CampaignsPage() {
   }, [])
 
   return (
-    <div className="container py-10">
-      <div className="flex items-center justify-between mb-6">
-        <div>
-          <h1 className="text-3xl font-bold tracking-tight">Campaigns</h1>
-          <p className="text-muted-foreground">Manage your outreach campaigns</p>
+    <div className="w-full flex flex-col items-center justify-center">
+      <header className="w-full border-b mb-10">
+        <div className="w-full flex items-center justify-between py-4 px-4">
+          <Link href="/">
+            <h1 className="text-lg sm:text-xl font-bold">Dashboard</h1>
+          </Link>
+          <nav className="flex items-center sm:gap-2">
+            <Link href="/campaigns">
+              <Button variant="ghost">Campaigns</Button>
+            </Link>
+            <Link href="/message-generator">
+              <Button variant="ghost">Message Generator</Button>
+            </Link>
+          </nav>
         </div>
-        <Link href="/campaigns/new">
-          <Button>
-            <PlusCircle className="mr-2 h-4 w-4" />
-            New Campaign
-          </Button>
-        </Link>
-      </div>
+      </header>
+      <div className="container px-4 pb-10">
+        <div className="flex items-center justify-between mb-6">
+          <div>
+            <h1 className="text-3xl font-bold tracking-tight">Campaigns</h1>
+            <p className="text-muted-foreground">Manage your outreach campaigns</p>
+          </div>
+          <Link href="/campaigns/new">
+            <Button>
+              <PlusCircle className="mr-2 h-4 w-4" />
+              New Campaign
+            </Button>
+          </Link>
+        </div>
 
-      {isLoading ? (
-        <div className="flex justify-center items-center h-64">
-          <div className="animate-spin rounded-full h-12 w-12 border-b-2 border-primary"></div>
-        </div>
-      ) : error ? (
-        <Card>
-          <CardContent className="pt-6">
-            <div className="text-center text-red-500">{error}</div>
-          </CardContent>
-        </Card>
-      ) : campaigns.length === 0 ? (
-        <Card>
-          <CardContent className="pt-6 pb-10">
-            <div className="flex flex-col items-center justify-center text-center space-y-4">
-              <div className="text-muted-foreground">No campaigns found</div>
-              <Link href="/campaigns/new">
-                <Button>
-                  <PlusCircle className="mr-2 h-4 w-4" />
-                  Create your first campaign
-                </Button>
-              </Link>
-            </div>
-          </CardContent>
-        </Card>
-      ) : (
-        <CampaignList campaigns={campaigns} />
-      )}
+        {isLoading ? (
+          <div className="flex justify-center items-center h-64">
+            <div className="animate-spin rounded-full h-12 w-12 border-b-2 border-primary"></div>
+          </div>
+        ) : error ? (
+          <Card>
+            <CardContent className="pt-6">
+              <div className="text-center text-red-500">{error}</div>
+            </CardContent>
+          </Card>
+        ) : campaigns.length === 0 ? (
+          <Card>
+            <CardContent className="pt-6 pb-10">
+              <div className="flex flex-col items-center justify-center text-center space-y-4">
+                <div className="text-muted-foreground">No campaigns found</div>
+                <Link href="/campaigns/new">
+                  <Button>
+                    <PlusCircle className="mr-2 h-4 w-4" />
+                    Create your first campaign
+                  </Button>
+                </Link>
+              </div>
+            </CardContent>
+          </Card>
+        ) : (
+          <CampaignList campaigns={campaigns} />
+        )}
+      </div>
     </div>
   )
 }

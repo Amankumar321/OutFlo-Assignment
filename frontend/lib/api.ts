@@ -7,23 +7,30 @@ const API_URL = process.env.NEXT_PUBLIC_API_URL || "http://localhost:5000"
 export async function fetchCampaigns(): Promise<Campaign[]> {
   try {
     const response = await fetch(`${API_URL}/campaigns`)
+    if (!response.ok) {
+      throw new Error(`Error: ${response.status}`)
+    }
     return await response.json()
   } catch (error) {
     console.error("Failed to fetch campaigns:", error)
-    return []
+    throw error
   }
 }
 
-export async function fetchCampaign(id: string): Promise<Campaign | undefined> {
+export async function fetchCampaign(id: string): Promise<Campaign> {
   try {
     const response = await fetch(`${API_URL}/campaigns/${id}`)
+    if (!response.ok) {
+      throw new Error(`Error: ${response.status}`)
+    }
     return await response.json()
   } catch (error) {
     console.error(`Failed to fetch campaign ${id}:`, error)
+    throw error
   }
 }
 
-export async function createCampaign(campaign: Omit<Campaign, "_id">): Promise<Campaign | undefined> {
+export async function createCampaign(campaign: Omit<Campaign, "_id">): Promise<Campaign> {
   try {
     const response = await fetch(`${API_URL}/campaigns`, {
       method: "POST",
@@ -33,13 +40,18 @@ export async function createCampaign(campaign: Omit<Campaign, "_id">): Promise<C
       body: JSON.stringify(campaign),
     })
 
+    if (!response.ok) {
+      throw new Error(`Error: ${response.status}`)
+    }
+
     return await response.json()
   } catch (error) {
     console.error("Failed to create campaign:", error)
+    throw error
   }
 }
 
-export async function updateCampaign(id: string, campaign: Omit<Campaign, "_id">): Promise<Campaign | undefined> {
+export async function updateCampaign(id: string, campaign: Omit<Campaign, "_id">): Promise<Campaign> {
   try {
     const response = await fetch(`${API_URL}/campaigns/${id}`, {
       method: "PUT",
@@ -49,20 +61,19 @@ export async function updateCampaign(id: string, campaign: Omit<Campaign, "_id">
       body: JSON.stringify(campaign),
     })
 
+    if (!response.ok) {
+      throw new Error(`Error: ${response.status}`)
+    }
+
     return await response.json()
   } catch (error) {
     console.error(`Failed to update campaign ${id}:`, error)
-
+    throw error
   }
 }
 
 export async function deleteCampaign(id: string): Promise<void> {
   try {
-    if (!API_URL) {
-      // Mock delete for demo
-      return
-    }
-
     const response = await fetch(`${API_URL}/campaigns/${id}`, {
       method: "DELETE",
     })
@@ -77,7 +88,7 @@ export async function deleteCampaign(id: string): Promise<void> {
 }
 
 // LinkedIn Message API
-export async function generatePersonalizedMessage(profile: LinkedInProfile): Promise<{ message: string } | undefined> {
+export async function generatePersonalizedMessage(profile: LinkedInProfile): Promise<{ message: string }> {
   try {
     const response = await fetch(`${API_URL}/personalized-message`, {
       method: "POST",
@@ -94,5 +105,6 @@ export async function generatePersonalizedMessage(profile: LinkedInProfile): Pro
     return await response.json()
   } catch (error) {
     console.error("Failed to generate personalized message:", error)
+    throw error;
   }
 }
