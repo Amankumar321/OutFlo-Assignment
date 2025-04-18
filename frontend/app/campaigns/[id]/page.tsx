@@ -103,7 +103,7 @@ export default function CampaignDetailPage({ params }: { params: { id: string } 
               Back
             </Button>
           </Link>
-          <h1 className="text-3xl font-bold tracking-tight">{campaign.name}</h1>
+          <h1 className="text-2xl sm:text-3xl font-bold tracking-tight">{campaign.name}</h1>
           <Badge variant={campaign.status === "ACTIVE" ? "default" : "secondary"}>
             {campaign.status.charAt(0).toUpperCase() + campaign.status.slice(1)}
           </Badge>
@@ -113,7 +113,7 @@ export default function CampaignDetailPage({ params }: { params: { id: string } 
           <div className="md:col-span-2">
             <Card>
               <CardHeader>
-                <CardTitle>Campaign Details</CardTitle>
+                <CardTitle className="text-xl">Campaign Details</CardTitle>
               </CardHeader>
               <CardContent>
                 <div className="space-y-4">
@@ -196,7 +196,7 @@ export default function CampaignDetailPage({ params }: { params: { id: string } 
           <div>
             <Card>
               <CardHeader>
-                <CardTitle>Campaign Status</CardTitle>
+                <CardTitle className="text-xl">Campaign Status</CardTitle>
               </CardHeader>
               <CardContent>
                 <div className="space-y-4">

@@ -46,7 +46,7 @@ export default function MessageGeneratorPage() {
         </div>
       </header>
       <div className="container mx-auto px-4 pb-10">
-        <h1 className="text-3xl font-bold tracking-tight mb-2">LinkedIn Message Generator</h1>
+        <h1 className="text-2xl sm:text-3xl font-bold tracking-tight mb-2">LinkedIn Message Generator</h1>
         <p className="text-muted-foreground mb-6">
           Generate personalized outreach messages based on LinkedIn profile data
         </p>
@@ -54,7 +54,7 @@ export default function MessageGeneratorPage() {
         <div className="grid gap-6 md:grid-cols-2">
           <Card>
             <CardHeader>
-              <CardTitle>Profile Information</CardTitle>
+              <CardTitle className="text-xl">Profile Information</CardTitle>
               <CardDescription>Enter LinkedIn profile details to generate a personalized message</CardDescription>
             </CardHeader>
             <CardContent>
@@ -64,7 +64,7 @@ export default function MessageGeneratorPage() {
 
           <Card>
             <CardHeader>
-              <CardTitle>Generated Message</CardTitle>
+              <CardTitle className="text-xl">Generated Message</CardTitle>
               <CardDescription>Your personalized outreach message will appear here</CardDescription>
             </CardHeader>
             <CardContent>

@@ -44,7 +44,7 @@ export function CampaignList({ campaigns }: CampaignListProps) {
             <div className="flex justify-between items-start">
               <div>
                 <CardTitle>
-                  <Link href={`/campaigns/${campaign._id}`} className="hover:underline">
+                  <Link href={`/campaigns/${campaign._id}`} className="hover:underline text-xl">
                     {campaign.name}
                   </Link>
                 </CardTitle>
@@ -67,7 +67,7 @@ export function CampaignList({ campaigns }: CampaignListProps) {
               </div>
             </div>
           </CardContent>
-          <CardFooter className="flex justify-between">
+          <CardFooter className="flex flex-col gap-4 items-start sm:flex-row sm:justify-between">
             <div className="flex items-center space-x-2">
               <Switch
                 checked={campaign.status === "ACTIVE"}
@@ -76,7 +76,7 @@ export function CampaignList({ campaigns }: CampaignListProps) {
               />
               <span className="text-sm">{updatingStatus[campaign._id] ? "Updating..." : "Active"}</span>
             </div>
-            <div className="flex space-x-2">
+            <div className="flex self-end space-x-2">
               <Link href={`/campaigns/${campaign._id}/edit`}>
                 <Button variant="outline" size="sm">
                   <Edit className="h-4 w-4 mr-1" />

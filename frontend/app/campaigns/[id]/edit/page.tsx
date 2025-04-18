@@ -94,12 +94,12 @@ export default function EditCampaignPage({ params }: { params: { id: string } })
                 Back
               </Button>
             </Link>
-            <h1 className="text-3xl font-bold tracking-tight">Edit Campaign</h1>
+            <h1 className="text-2xl sm:text-3xl font-bold tracking-tight">Edit Campaign</h1>
           </div>
 
           <Card>
             <CardHeader>
-              <CardTitle>Edit Campaign Details</CardTitle>
+              <CardTitle className="text-xl">Edit Campaign Details</CardTitle>
               <CardDescription>Update the details for your campaign</CardDescription>
             </CardHeader>
             <CardContent>
