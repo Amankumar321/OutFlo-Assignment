@@ -173,7 +173,7 @@ export default function CampaignDetailPage({ params }: { params: { id: string } 
                   <AlertDialogTrigger asChild>
                     <Button variant="destructive" disabled={isDeleting}>
                       <Trash2 className="mr-2 h-4 w-4" />
-                      {isDeleting ? "Deleting..." : "Delete Campaign"}
+                      {isDeleting ? "Deleting..." : "Delete"}
                     </Button>
                   </AlertDialogTrigger>
                   <AlertDialogContent>

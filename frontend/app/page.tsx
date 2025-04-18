@@ -56,7 +56,7 @@ export default function HomePage() {
         </div>
       </main>
       <footer className="border-t py-6">
-        <div className="container flex flex-col items-center justify-between gap-4 md:flex-row">
+        <div className="container flex flex-col items-center justify-between px-2 gap-4 md:flex-row">
           <p className="text-sm text-muted-foreground">© 2024 Campaign Management System. All rights reserved.</p>
         </div>
       </footer>
