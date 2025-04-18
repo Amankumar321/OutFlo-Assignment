@@ -1,6 +1,6 @@
 "use client"
 
-import { useState } from "react"
+import { useState, useEffect } from "react"
 import { zodResolver } from "@hookform/resolvers/zod"
 import { useForm } from "react-hook-form"
 import * as z from "zod"
@@ -10,6 +10,7 @@ import { Input } from "@/components/ui/input"
 import { Textarea } from "@/components/ui/textarea"
 import { RadioGroup, RadioGroupItem } from "@/components/ui/radio-group"
 import type { Campaign } from "@/types/campaign"
+import { fetchProfiles, scrapeProfiles } from "@/lib/api"
 
 const campaignSchema = z.object({
   name: z.string().min(1, "Name is required"),
@@ -19,6 +20,15 @@ const campaignSchema = z.object({
   accountIDs: z.array(z.string().min(1, "Account ID cannot be empty")),
 })
 
+interface LinkedInProfile {
+  _id: string
+  fullName: string
+  jobTitle: string
+  company: string
+  location: string
+  profileUrl: string
+}
+
 interface CampaignFormProps {
   onSubmit: (data: Omit<Campaign, "_id">) => Promise<void>
   isSubmitting: boolean
@@ -26,8 +36,10 @@ interface CampaignFormProps {
 }
 
 export function CampaignForm({ onSubmit, isSubmitting, initialData }: CampaignFormProps) {
-  const [newLead, setNewLead] = useState("")
-  const [newAccountID, setNewAccountID] = useState("")
+  const [searchUrl, setSearchUrl] = useState("")
+  const [isScraping, setIsScraping] = useState(false)
+  const [profiles, setProfiles] = useState<LinkedInProfile[]>([])
+  const [selectedProfiles, setSelectedProfiles] = useState<string[]>([])
 
   const form = useForm<z.infer<typeof campaignSchema>>({
     resolver: zodResolver(campaignSchema),
@@ -44,46 +56,76 @@ export function CampaignForm({ onSubmit, isSubmitting, initialData }: CampaignFo
         },
   })
 
-  const handleAddLead = () => {
-    if (!newLead) return
-
-    try {
-      // Basic URL validation
-      new URL(newLead)
-
-      const currentLeads = form.getValues("leads")
-      if (!currentLeads.includes(newLead)) {
-        form.setValue("leads", [...currentLeads, newLead])
+  useEffect(() => {
+    const loadProfiles = async () => {
+      try {
+        const data = await fetchProfiles()
+        setProfiles(data)
+      } catch (error) {
+        console.error("Error loading profiles:", error)
       }
-      setNewLead("")
-    } catch (err) {
-      form.setError("leads", { message: "Please enter a valid URL" })
     }
+    loadProfiles()
+  }, [])
+
+  const handleScrape = async () => {
+    if (!searchUrl) return
+    setIsScraping(true)
+    try {
+      const data = await scrapeProfiles(searchUrl)
+      setProfiles(data)
+    } catch (error) {
+      alert("Scraping failed:" + error)
+    } finally {
+      setIsScraping(false)
+    }
+  }
+
+  const handleAddSelectedProfiles = () => {
+    if (selectedProfiles.length === 0) return
+
+    const selectedProfileData = profiles.filter(profile => 
+      selectedProfiles.includes(profile._id)
+    )
+
+    // Update leads and accountIDs in the form
+    const currentLeads = form.getValues("leads")
+    const currentAccountIDs = form.getValues("accountIDs")
+    
+    const newLeads = [...currentLeads]
+    const newAccountIDs = [...currentAccountIDs]
+
+    selectedProfileData.forEach(profile => {
+      if (!currentLeads.includes(profile.profileUrl)) {
+        newLeads.push(profile.profileUrl)
+        newAccountIDs.push(profile._id)
+      }
+    })
+
+    form.setValue("leads", newLeads)
+    form.setValue("accountIDs", newAccountIDs)
+    setSelectedProfiles([])
   }
 
   const handleRemoveLead = (index: number) => {
     const currentLeads = form.getValues("leads")
+    const currentAccountIDs = form.getValues("accountIDs")
+    
     form.setValue(
       "leads",
       currentLeads.filter((_, i) => i !== index),
     )
-  }
-
-  const handleAddAccountID = () => {
-    if (!newAccountID) return
-
-    const currentAccountIDs = form.getValues("accountIDs")
-    if (!currentAccountIDs.includes(newAccountID)) {
-      form.setValue("accountIDs", [...currentAccountIDs, newAccountID])
-    }
-    setNewAccountID("")
-  }
-
-  const handleRemoveAccountID = (index: number) => {
-    const currentAccountIDs = form.getValues("accountIDs")
     form.setValue(
       "accountIDs",
       currentAccountIDs.filter((_, i) => i !== index),
+    )
+  }
+
+  const toggleProfileSelection = (profileId: string) => {
+    setSelectedProfiles(prev => 
+      prev.includes(profileId)
+        ? prev.filter(id => id !== profileId)
+        : [...prev, profileId]
     )
   }
 
@@ -145,73 +187,91 @@ export function CampaignForm({ onSubmit, isSubmitting, initialData }: CampaignFo
           )}
         />
 
+        {/* LinkedIn Profile Scraping Section */}
+        <div className="space-y-4">
+          <FormLabel>LinkedIn Profile Scraper</FormLabel>
+          <div className="flex space-x-2">
+            <Input
+              placeholder="Enter LinkedIn search URL"
+              value={searchUrl}
+              onChange={(e) => setSearchUrl(e.target.value)}
+            />
+            <Button 
+              type="button" 
+              onClick={handleScrape} 
+              disabled={isScraping || !searchUrl}
+            >
+              {isScraping ? "Scraping..." : "Scrape Profiles"}
+            </Button>
+          </div>
+
+          {profiles.length > 0 && (
+            <div className="border rounded-md p-4 space-y-4">
+              <div className="flex justify-between items-center">
+                <h3 className="font-medium">Scraped Profiles</h3>
+                <Button 
+                  type="button" 
+                  onClick={handleAddSelectedProfiles} 
+                  disabled={selectedProfiles.length === 0}
+                  size="sm"
+                >
+                  Add Selected
+                </Button>
+              </div>
+              
+              <div className="space-y-2 max-h-60 overflow-y-auto">
+                {profiles.map(profile => (
+                  <div 
+                    key={profile._id} 
+                    className={`p-3 rounded-md border cursor-pointer ${selectedProfiles.includes(profile._id) ? 'bg-muted' : ''}`}
+                    onClick={() => toggleProfileSelection(profile._id)}
+                  >
+                    <div className="font-medium">{profile.fullName}</div>
+                    <div className="text-sm text-muted-foreground">{profile.jobTitle} at {profile.company}</div>
+                    <div className="text-xs text-muted-foreground">{profile.location}</div>
+                  </div>
+                ))}
+              </div>
+            </div>
+          )}
+        </div>
+
+        {/* Selected Leads Section */}
         <FormField
           control={form.control}
           name="leads"
           render={() => (
             <FormItem>
-              <FormLabel>LinkedIn Leads</FormLabel>
-              <div className="flex space-x-2">
-                <Input
-                  placeholder="https://linkedin.com/in/profile"
-                  value={newLead}
-                  onChange={(e) => setNewLead(e.target.value)}
-                />
-                <Button type="button" onClick={handleAddLead} variant="outline">
-                  Add
-                </Button>
-              </div>
+              <FormLabel>Selected Leads</FormLabel>
               <div className="mt-2">
                 {form.getValues("leads").length > 0 ? (
                   <ul className="space-y-2">
-                    {form.getValues("leads").map((lead, index) => (
-                      <li key={index} className="flex items-center justify-between p-2 bg-muted rounded-md">
-                        <span className="text-sm truncate">{lead}</span>
-                        <Button type="button" onClick={() => handleRemoveLead(index)} variant="ghost" size="sm">
-                          Remove
-                        </Button>
-                      </li>
-                    ))}
+                    {form.getValues("leads").map((lead, index) => {
+                      const profile = profiles.find(p => p.profileUrl === lead)
+                      return (
+                        <li key={index} className="flex items-center justify-between p-2 bg-muted rounded-md">
+                          <div>
+                            <span className="font-medium">{profile?.fullName || lead}</span>
+                            {profile && (
+                              <div className="text-sm text-muted-foreground">
+                                {profile.jobTitle} at {profile.company}
+                              </div>
+                            )}
+                          </div>
+                          <Button 
+                            type="button" 
+                            onClick={() => handleRemoveLead(index)} 
+                            variant="ghost" 
+                            size="sm"
+                          >
+                            Remove
+                          </Button>
+                        </li>
+                      )
+                    })}
                   </ul>
                 ) : (
                   <p className="text-sm text-muted-foreground">No leads added yet</p>
-                )}
-              </div>
-              <FormMessage />
-            </FormItem>
-          )}
-        />
-
-        <FormField
-          control={form.control}
-          name="accountIDs"
-          render={() => (
-            <FormItem>
-              <FormLabel>Account IDs</FormLabel>
-              <div className="flex space-x-2">
-                <Input
-                  placeholder="Enter account ID"
-                  value={newAccountID}
-                  onChange={(e) => setNewAccountID(e.target.value)}
-                />
-                <Button type="button" onClick={handleAddAccountID} variant="outline">
-                  Add
-                </Button>
-              </div>
-              <div className="mt-2">
-                {form.getValues("accountIDs").length > 0 ? (
-                  <ul className="space-y-2">
-                    {form.getValues("accountIDs").map((id, index) => (
-                      <li key={index} className="flex items-center justify-between p-2 bg-muted rounded-md">
-                        <span className="text-sm">{id}</span>
-                        <Button type="button" onClick={() => handleRemoveAccountID(index)} variant="ghost" size="sm">
-                          Remove
-                        </Button>
-                      </li>
-                    ))}
-                  </ul>
-                ) : (
-                  <p className="text-sm text-muted-foreground">No account IDs added yet</p>
                 )}
               </div>
               <FormMessage />

@@ -108,3 +108,40 @@ export async function generatePersonalizedMessage(profile: LinkedInProfile): Pro
     throw error;
   }
 }
+
+// Fetch scraped profiles from the database
+export async function fetchProfiles(): Promise<LinkedInProfile[]> {
+  try {
+    const response = await fetch(`${API_URL}/scraper/profiles`)
+    if (!response.ok) {
+      throw new Error(`Error: ${response.status}`)
+    }
+    return await response.json()
+  } catch (error) {
+    console.error("Failed to fetch profiles:", error)
+    throw error
+  }
+}
+
+// Scrape new LinkedIn profiles based on a search URL
+export async function scrapeProfiles(searchUrl: string): Promise<LinkedInProfile[]> {
+  try {
+    const response = await fetch(`${API_URL}/scraper/scrape`, {
+      method: "POST",
+      headers: {
+        "Content-Type": "application/json",
+      },
+      body: JSON.stringify({ searchUrl }),
+    })
+
+    if (!response.ok) {
+      throw new Error(`Error: ${response.status}`)
+    }
+
+    const data = await response.json()
+    return data.profiles
+  } catch (error) {
+    console.error("Failed to scrape profiles:", error)
+    throw error
+  }
+}
