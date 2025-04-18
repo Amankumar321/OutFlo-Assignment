@@ -69,12 +69,12 @@ npm install
 ```
 
 3. Create a .env file in the backend directory with the following variables:
-MONGODB_URI=mongodb://localhost:27017/campaign_db
-PORT=5000
-LLM_ENDPOINT=https://api.deepinfra.com/v1/openai/chat/completions
-LLM_MODEL=meta-llama/Llama-3.3-70B-Instruct
-OPENAI_API_KEY=your_deepinfra_api_key
-LI_AT=your_linkedin_cookie
+- MONGODB_URI=mongodb://localhost:27017/campaign_db
+- PORT=5000
+- LLM_ENDPOINT=https://api.deepinfra.com/v1/openai/chat/completions
+- LLM_MODEL=meta-llama/Llama-3.3-70B-Instruct
+- OPENAI_API_KEY=your_deepinfra_api_key
+- LI_AT=your_linkedin_cookie
 
 4. Run the development server:
 ```bash
@@ -93,7 +93,7 @@ pnpm install
 ```
 
 3. Create a .env file in the frontend directory with:
-NEXT_PUBLIC_API_URL=http://localhost:5000
+- NEXT_PUBLIC_API_URL=http://localhost:5000
 
 4. Run the development server:
 ```bash
